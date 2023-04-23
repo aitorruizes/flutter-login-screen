@@ -4,11 +4,13 @@ class CustomTextField extends StatefulWidget {
   final String label;
   final String leftIcon;
   final bool hasEyeIcon;
+  final TextEditingController controller;
 
   const CustomTextField({
     required this.label,
     required this.leftIcon,
     required this.hasEyeIcon,
+    required this.controller,
     Key? key,
   }) : super(key: key);
   
@@ -48,11 +50,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 10.0),
                 child: TextField(
-                  obscureText: _showPassword ? false : true,
+                  obscureText: widget.leftIcon == "email" ? false : _showPassword ? false : true,
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: widget.label,
                   ),
+                  controller: widget.controller,
                 ),
               ),
             ),

@@ -1,9 +1,44 @@
-import 'package:app/components/custom_button.dart';
-import 'package:app/components/custom_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:app/screens/home_screen.dart';
+import 'package:app/components/custom_textfield.dart';
+import 'package:app/components/custom_button.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  bool _isLoading = false;
+
+  void showLoadingIcon() {
+    setState(() {
+      _isLoading = true;
+    });
+  }
+
+  void popLoadingIcon() {
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  void _handleSubmit() {
+    showLoadingIcon();
+
+    final currentContext = context;
+
+    Future.delayed(const Duration(seconds: 2)).then((_) {
+      if (emailController.text == "admin@admin.com" && passwordController.text == "admin") {
+        Navigator.push(currentContext, MaterialPageRoute(builder: (context) => const HomeScreen()));
+      }
+      popLoadingIcon();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,14 +63,27 @@ class LoginScreen extends StatelessWidget {
                 style: TextStyle(fontSize: 20),
               ),
               const SizedBox(height: 50.0),
-              const CustomTextField(label: "Email", leftIcon: "email", hasEyeIcon: false),
+              CustomTextField(
+                label: "Email",
+                leftIcon: "email",
+                hasEyeIcon: false,
+
+                controller: emailController
+              ),
               const SizedBox(height: 10.0),
-              const CustomTextField(label: "Password", leftIcon: "lock", hasEyeIcon: true),
+              CustomTextField(
+                label: "Password",
+                leftIcon: "lock",
+                hasEyeIcon: true,
+                controller: passwordController
+              ),
               const SizedBox(height: 20.0),
               CustomButton(
                 label: "Entrar",
                 color: Colors.deepPurple,
-                borderRadius: BorderRadius.circular(8)
+                borderRadius: BorderRadius.circular(8),
+                onTap: _handleSubmit,
+                hasSubmitted: _isLoading
               ),
               const SizedBox(height: 10.0),
               Row(
